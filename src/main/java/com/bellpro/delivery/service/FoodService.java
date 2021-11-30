@@ -20,9 +20,7 @@ public class FoodService {
 
     // 음식명 등록
     @Transactional  // 트랜잭션 처리
-    public List<Food> saveFood(Long restaurantId, List<FoodDto> foodDto){
-        List<Food> foodList = new ArrayList<>();
-
+    public void saveFood(Long restaurantId, List<FoodDto> foodDto){
         // 같은 음식점 음식명 중복 검사
         for (int i = 0; i < foodDto.size(); i++){
             Optional<Food> checkFoodName = foodRepository.findByRestaurantIdAndName(restaurantId, foodDto.get(i).getName());
@@ -35,9 +33,7 @@ public class FoodService {
             // 음식 등록
             Food food = new Food(restaurantId, foodDto.get(i));
             foodRepository.save(food);
-            foodList.add(food);
         }
-        return foodList;
     }
 
     public List<FoodResponseDto> listFoods(Long restaurantId) {
@@ -51,4 +47,6 @@ public class FoodService {
         }
         return foodResponseDtoList;
     }
+
+
 }

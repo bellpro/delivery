@@ -16,12 +16,12 @@ public class FoodController {
 
     // 음식명 등록
     @PostMapping("/restaurant/{restaurantId}/food/register")
-    public List<Food> registerFood(@PathVariable Long restaurantId, @RequestBody List<FoodDto> foodDto){
-        return foodService.saveFood(restaurantId, foodDto);
+    public void registerFood(@PathVariable Long restaurantId, @RequestBody List<FoodDto> foodDto){
+        foodService.saveFood(restaurantId, foodDto);
     }
 
     // 음식점별 음식명 조회
-    @GetMapping("/{restaurantId}/foods")
+    @GetMapping("/restaurant/{restaurantId}/foods")
     public List<FoodResponseDto> getFoods(@PathVariable Long restaurantId){
         return foodService.listFoods(restaurantId);
     }

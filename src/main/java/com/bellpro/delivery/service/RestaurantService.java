@@ -19,10 +19,10 @@ public class RestaurantService {
     @Transactional  // 트랜잭션 처리
     public Restaurant saveRestaurant(RestaurantDto restaurantDto){
         // 음식점 이름 중복 검사
-        Optional<Restaurant> checkName = restaurantRepository.findByName(restaurantDto.getName());
-        if (checkName.isPresent()){
-            throw new IllegalArgumentException("중복된 음식점 이름입니다.");
-        }
+//        Optional<Restaurant> checkName = restaurantRepository.findByName(restaurantDto.getName());
+//        if (checkName.isPresent()){
+//            throw new IllegalArgumentException("중복된 음식점 이름입니다.");
+//        }
         // 음식점 정보 유효성 검사 (최소주문 가격, 기본 배달비)
         RestaurantDtoValidator.validateRestaurantDto(restaurantDto);
 
