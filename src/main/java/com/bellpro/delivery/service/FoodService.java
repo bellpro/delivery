@@ -1,9 +1,11 @@
 package com.bellpro.delivery.service;
 
 import com.bellpro.delivery.domain.Food;
+import com.bellpro.delivery.domain.Restaurant;
 import com.bellpro.delivery.dto.FoodDto;
 import com.bellpro.delivery.dto.FoodResponseDto;
 import com.bellpro.delivery.repository.FoodRepository;
+import com.bellpro.delivery.repository.RestaurantRepository;
 import com.bellpro.delivery.validator.FoodDtoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,18 @@ import java.util.Optional;
 @RequiredArgsConstructor    // 의존성 주입, final 필드에 대해 생성자를 생성,  @Autowired 대신 사용
 @Service    // Service 명시(@Component 포함): Bean 등록
 public class FoodService {
+    private final RestaurantRepository restaurantRepository;
     private final FoodRepository foodRepository;
 
     // 음식명 등록
     @Transactional  // 트랜잭션 처리
     public void saveFood(Long restaurantId, List<FoodDto> foodDto){
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NullPointerException("해당 음식점이 존재하지 않습니다."));
+
         // 같은 음식점 음식명 중복 검사
         for (int i = 0; i < foodDto.size(); i++){
-            Optional<Food> checkFoodName = foodRepository.findByRestaurantIdAndName(restaurantId, foodDto.get(i).getName());
+            Optional<Food> checkFoodName = foodRepository.findByRestaurantAndName(restaurant, foodDto.get(i).getName());
             if (checkFoodName.isPresent()){
                 throw new IllegalArgumentException("중복된 음식명이 존재합니다.");
             }
@@ -31,7 +37,7 @@ public class FoodService {
             FoodDtoValidator.validateFoodDto(foodDto.get(i));
 
             // 음식 등록
-            Food food = new Food(restaurantId, foodDto.get(i));
+            Food food = new Food(restaurant, foodDto.get(i));
             foodRepository.save(food);
         }
     }

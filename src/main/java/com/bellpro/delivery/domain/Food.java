@@ -14,8 +14,9 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // 자동으로 인덱스 증가
     private Long id;
 
-    @Column(nullable = false)           // 열 설정 (무조건 입력)
-    private Long restaurantId;          // 음식점 ID
+    @ManyToOne  // 다대일 (하나의 음식점에는 여러 개의 음식들이 있다)
+    @JoinColumn(name = "restaurant_id", nullable = false) // 열 설정 (외래키 이름, 무조건 입력)
+    Restaurant restaurant;              // 음식점
 
     @Column(nullable = false)           // 열 설정 (무조건 입력)
     private String name;                // 음식명
@@ -24,8 +25,8 @@ public class Food {
     private int price;                  // 가격
 
     // 음식점 dto 생성자
-    public Food(Long restaurantId, FoodDto foodDto){
-        this.restaurantId = restaurantId;
+    public Food(Restaurant restaurant, FoodDto foodDto){
+        this.restaurant = restaurant;
         this.name = foodDto.getName();
         this.price = foodDto.getPrice();
     }
