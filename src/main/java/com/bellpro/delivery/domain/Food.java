@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter // get 메소드 자동 생성
 @NoArgsConstructor  // 기본 생성자 자동 생성
